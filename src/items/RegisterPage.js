@@ -13,15 +13,13 @@ export default function RegisterPage() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <lable>Email</lable>
-                <input type="email" {...register('email', { required: true, pattern: /^\S+@\S+$/i}) }/>
+                <input placeholder="email" type="email" {...register('email', { required: true, pattern: /^\S+@\S+$/i}) }/>
                 {errors.email && errors.email.type === 'required' && <p>Email field is required</p>}
-
-                <lable>Name</lable>
-                <input type="text" name="name" {...register('name', { required: true, maxLength: 10 })} />
-                {errors.name && errors.name.type === 'required' && <p>This field is required.</p>}
+                <br/>
+                <input placeholder="name" type="text" name="name" {...register('name', { required: true, maxLength: 10 })} />
+                {errors.name && errors.name.type === 'required' && <p>Name field is required.</p>}
                 {errors.name && errors.name.type === 'maxLength' && <p>Your input exceed maximum length.</p>}
-                
+                <br/>
                 <input type="submit" />
             </form>
 
