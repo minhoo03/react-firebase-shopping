@@ -1,57 +1,60 @@
-import React, { useState } from 'react'
+import React, { Component } from 'react'
+import { useObserver } from 'mobx-react'
 import { useForm } from "react-hook-form"
 import firebase from '../firebase'
 import { useHistory } from 'react-router-dom'
 
-export default function LoginPage() {
+export class LoginPage2 extends Component {
 
-    let history = useHistory()
+    state = {
+        errorMsg: '',
+        loading: false
+    }
 
-    const { register, watch, formState:{errors}, handleSubmit } = useForm({mode: 'onChange'})
-    const [errorMsg, setErrorMsg] = useState('')
-    const [loading, setLoading] = useState(false)
+    onSubmit = async (data) => {  
+        data.preventDefault()
 
-    console.log(watch('email', 'password'));
-    
-    const onSubmit = async (data) => {  
         try{
-            setLoading(true)
+            this.setState({ loading: true })
             
-            await firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+            // console.log(data.target.email.value)
+            await firebase.auth().signInWithEmailAndPassword(data.target.email.value, data.target.password.value)
 
             console.log('login')
 
-            history.push('/')
+            // this.props.history.push('/')
 
-            setLoading(false)
+            this.setState({ loading: false })
         } catch(error) {
-            setErrorMsg(error.message)
-            setLoading(false)
+            this.setState({ errorMsg: error.message })
+            this.setState({ loading: false })
             setTimeout(() => {
-                setErrorMsg('')
+                this.setState({ errorMsg: '' })
             }, 5000);
         }
     }
 
+    render() {
 
-    return (
-        <div className="auth_wrapper">
+        return (
+            <div className="auth_wrapper">
             <h3>Login</h3>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={this.onSubmit}>
 
-                <input placeholder="email" type="email" {...register('email', { required: true, pattern: /^\S+@\S+$/i}) }/>
-                {errors.email && errors.email.type === 'required' && <p>Email field is required</p>}
+                <input placeholder="email" type="email" name="email" />
                 <br/>
 
-                <input placeholder="password" type="password" name="password" {...register('password', { required: true, minLength: 7 })} />
-                {errors.password && errors.password.type === 'required' && <p>Password field is required.</p>}
-                {errors.password && errors.password.type === 'minLength' && <p>Your input exceed minimum length.</p>}
+                <input placeholder="password" type="password" name="password" />
                 <br/>
 
-                {errorMsg && <p>{errorMsg}</p>}
-                <input type="submit" disabled={loading} />
+                {this.state.errorMsg && <p>{this.state.errorMsg}</p>}
+                <input type="submit" disabled={this.state.loading} />
             </form>
+
         </div>
-    )
+        )
+    }
 }
+
+export default LoginPage2
