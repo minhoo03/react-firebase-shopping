@@ -1,9 +1,12 @@
 import React, { useRef, useState } from 'react'
 import { useForm } from "react-hook-form"
 import firebase from '../firebase'
+import { useHistory } from 'react-router-dom'
 import md5 from 'md5'
 
 export default function RegisterPage() {
+
+    let history = useHistory()
 
     const { register, watch, formState:{errors}, handleSubmit } = useForm({mode: 'onChange'})
     const [errorMsg, setErrorMsg] = useState('')
@@ -33,6 +36,8 @@ export default function RegisterPage() {
             })
 
             setLoading(false)
+
+            history.push('/login')
         } catch (error) {
             setErrorMsg(error.message)
             setLoading(false)
