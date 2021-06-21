@@ -1,10 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Link } from 'react-router-dom'
 
+import { useDispatch } from 'react-redux'
+import { clearUser } from '../Redux/actions/user_action'
+
 export default function Nav() {
 
-    const [test, setTest] = useState(false)
+    const dispatch = useDispatch()
+
+    const user = useSelector(state => state.user.currentUser)
+    const [userState, setUserState] = useState(false)
+
+    useEffect(() => {
+        if(user != null) {
+            setUserState(true)
+        } else {
+            setUserState(false)
+        }
+    }, [user])
+
+    const handleLogout = () => {
+        dispatch(clearUser())
+    }
 
     return (
         <>
@@ -22,7 +41,7 @@ export default function Nav() {
                         <Link className="li-Link" to="/product">PRODUCT</Link>
                     </li>
 
-                    {test === false ?                         
+                    {userState === false ?                         
                         <>
                             <li>
                                 <Link className="li-Link" to="/login">LOGIN</Link>
@@ -33,7 +52,7 @@ export default function Nav() {
                         </>
                         :
                         <>
-                            <li className="li-Link">
+                            <li className="li-Link" onClick={handleLogout} style={{cursor:'pointer'}}>
                                 LOGOUT
                             </li>
                             <li>

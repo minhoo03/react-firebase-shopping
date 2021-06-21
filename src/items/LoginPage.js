@@ -1,7 +1,12 @@
 // function component
 
-import React, { useState, Component } from 'react'
+import React, { useState, useEffect } from 'react'
+
 import { useObserver } from 'mobx-react'
+import { useDispatch, useSelector } from 'react-redux'
+
+import { setUser, clearUser } from '../Redux/actions/user_action'
+
 import { useForm } from "react-hook-form"
 import firebase from '../firebase'
 import { useHistory } from 'react-router-dom'
@@ -9,7 +14,8 @@ import { useHistory } from 'react-router-dom'
 export default function LoginPage() {
 
     let history = useHistory()
-
+    let dispatch = useDispatch()
+    
     const { register, watch, formState:{errors}, handleSubmit } = useForm({mode: 'onChange'})
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
@@ -22,10 +28,6 @@ export default function LoginPage() {
             
             await firebase.auth().signInWithEmailAndPassword(data.email, data.password)
 
-            console.log('login')
-
-            history.push('/')
-
             setLoading(false)
         } catch(error) {
             setErrorMsg(error.message)
@@ -35,6 +37,19 @@ export default function LoginPage() {
             }, 5000);
         }
     }
+
+    useEffect(() => {    
+        
+        firebase.auth().onAuthStateChanged(user => {
+            if(user) {
+                dispatch(setUser(user))
+                history.push('/')
+            } else {
+                history.push('/login')
+                dispatch(clearUser())
+            }
+        })
+    }, [])
 
 
     return (
