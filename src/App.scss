@@ -1,9 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300&display=swap');
 
 * {
     margin: 0;
     padding: 0;
     font-family: 'Noto Sans', sans-serif;
+    font-family: 'Noto Sans-KR', sans-serif;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
 }
 
 ul,
@@ -59,4 +66,28 @@ a {
 
 .li-Link {
     color: #868686;
+}
+
+.productPage {
+    h1 {
+        margin-top: 40px;
+        margin-bottom: 40px;
+        text-align: center;
+    }
+
+    .products {
+        width: 80%;
+        margin: 0 auto;
+        height: 400px;
+        background: #000;
+    }
+}
+
+.uploadPage {
+    form {
+        width: 800px;
+        height: 600px;
+        background: pink;
+        margin: 0 auto;
+    }
 }
