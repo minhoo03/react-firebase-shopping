@@ -41,9 +41,6 @@ export default function Nav() {
                         <Link className="li-Link" to="/">HOME</Link>
                     </li>
                     <li>
-                        <Link className="li-Link" to="/introduct">ABOUT US</Link>
-                    </li>
-                    <li>
                         <Link className="li-Link" to="/product">PRODUCT</Link>
                     </li>
 
@@ -58,6 +55,9 @@ export default function Nav() {
                         </>
                         :
                         <>
+                            <li>
+                                <Link className="li-Link" to="/upload">UPLOAD</Link>
+                            </li>
                             <li className="li-Link" onClick={handleLogout} style={{ cursor: 'pointer' }}>
                                 LOGOUT
                             </li>

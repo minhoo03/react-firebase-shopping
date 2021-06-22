@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function IntroPage() {
+export default function UploadPage() {
     return (
         <div>
-            IntroPage
+            UploadPage
         </div>
     )
 }
