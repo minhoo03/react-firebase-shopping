@@ -15,21 +15,25 @@ export default function LoginPage() {
 
     let history = useHistory()
     let dispatch = useDispatch()
-    
-    const { register, watch, formState:{errors}, handleSubmit } = useForm({mode: 'onChange'})
+
+
+    const { register, watch, formState: { errors }, handleSubmit } = useForm({ mode: 'onChange' })
     const [errorMsg, setErrorMsg] = useState('')
     const [loading, setLoading] = useState(false)
 
     console.log(watch('email', 'password'));
-    
-    const onSubmit = async (data) => {  
-        try{
+
+    const onSubmit = async (data) => {
+        try {
             setLoading(true)
-            
-            await firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+
+            let user = await firebase.auth().signInWithEmailAndPassword(data.email, data.password)
+
+            dispatch(setUser(user))
+            history.push('/')
 
             setLoading(false)
-        } catch(error) {
+        } catch (error) {
             setErrorMsg(error.message)
             setLoading(false)
             setTimeout(() => {
@@ -38,19 +42,6 @@ export default function LoginPage() {
         }
     }
 
-    useEffect(() => {    
-        
-        firebase.auth().onAuthStateChanged(user => {
-            if(user) {
-                dispatch(setUser(user))
-                history.push('/')
-            } else {
-                history.push('/login')
-                dispatch(clearUser())
-            }
-        })
-    }, [])
-
 
     return (
         <div className="auth_wrapper">
@@ -58,14 +49,14 @@ export default function LoginPage() {
 
             <form onSubmit={handleSubmit(onSubmit)}>
 
-                <input placeholder="email" type="email" {...register('email', { required: true, pattern: /^\S+@\S+$/i}) }/>
+                <input placeholder="email" type="email" {...register('email', { required: true, pattern: /^\S+@\S+$/i })} />
                 {errors.email && errors.email.type === 'required' && <p>Email field is required</p>}
-                <br/>
+                <br />
 
                 <input placeholder="password" type="password" name="password" {...register('password', { required: true, minLength: 7 })} />
                 {errors.password && errors.password.type === 'required' && <p>Password field is required.</p>}
                 {errors.password && errors.password.type === 'minLength' && <p>Your input exceed minimum length.</p>}
-                <br/>
+                <br />
 
                 {errorMsg && <p>{errorMsg}</p>}
                 <input type="submit" disabled={loading} />

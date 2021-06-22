@@ -6,15 +6,18 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { clearUser } from '../Redux/actions/user_action'
 
+import { useHistory } from 'react-router-dom'
+
 export default function Nav() {
 
+    let history = useHistory()
     const dispatch = useDispatch()
 
     const user = useSelector(state => state.user.currentUser)
     const [userState, setUserState] = useState(false)
 
     useEffect(() => {
-        if(user != null) {
+        if (user != null) {
             setUserState(true)
         } else {
             setUserState(false)
@@ -23,14 +26,17 @@ export default function Nav() {
 
     const handleLogout = () => {
         dispatch(clearUser())
+        history.push('/')
     }
 
     return (
         <>
-            <nav style={{ width: '100%', height: '100px', position:'relative' }}>
-                <ul style={{ width:'500px', height:'100px', display: 'flex', 
-                            justifyContent:'space-around', alignItems:'center', 
-                            position: 'absolute', right:'8%' }}>
+            <nav style={{ width: '100%', height: '100px', position: 'relative' }}>
+                <ul style={{
+                    width: '500px', height: '100px', display: 'flex',
+                    justifyContent: 'space-around', alignItems: 'center',
+                    position: 'absolute', right: '8%'
+                }}>
                     <li>
                         <Link className="li-Link" to="/">HOME</Link>
                     </li>
@@ -41,7 +47,7 @@ export default function Nav() {
                         <Link className="li-Link" to="/product">PRODUCT</Link>
                     </li>
 
-                    {userState === false ?                         
+                    {userState === false ?
                         <>
                             <li>
                                 <Link className="li-Link" to="/login">LOGIN</Link>
@@ -52,7 +58,7 @@ export default function Nav() {
                         </>
                         :
                         <>
-                            <li className="li-Link" onClick={handleLogout} style={{cursor:'pointer'}}>
+                            <li className="li-Link" onClick={handleLogout} style={{ cursor: 'pointer' }}>
                                 LOGOUT
                             </li>
                             <li>
@@ -60,12 +66,12 @@ export default function Nav() {
                             </li>
                         </>
                     }
-                    
-                    
+
+
                 </ul>
             </nav>
         </>
 
-        
+
     )
 }
